@@ -9,9 +9,5 @@ namespace RockMusicBand
         public int Id { get; set; }
         public string Adjective { get; set; }
 
-        //public override string ToString()
-        //{
-        //    return $"{Adjective}";
-        //}
     }
 }

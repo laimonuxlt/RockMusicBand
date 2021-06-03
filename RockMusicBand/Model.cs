@@ -40,16 +40,16 @@ namespace RockMusicBand
 
         List<Musician> musicians = new List<Musician>()
         {
-            new Musician() { Id = 0, Name = "Bodrum Salvador" },
-            new Musician() { Id = 1, Name = "Hilary Ouse" },
-            new Musician() { Id = 2, Name = "Indigo Violet" },
-            new Musician() { Id = 3, Name = "Hans Down" },
-            new Musician() { Id = 4, Name = "Shequondolisa Bivouac" },
-            new Musician() { Id = 5, Name = "Ingredia Nutrisha" },
-            new Musician() { Id = 6, Name = "Fig Nelson" },
-            new Musician() { Id = 7, Name = "Benjamin Evalent" },
-            new Musician() { Id = 8, Name = "Gustav Purpleson" },
-            new Musician() { Id = 9, Name = "Elon Gated" },
+            new Musician() { Id = 1, Name = "Bodrum Salvador" },
+            new Musician() { Id = 2, Name = "Hilary Ouse" },
+            new Musician() { Id = 3, Name = "Indigo Violet" },
+            new Musician() { Id = 4, Name = "Hans Down" },
+            new Musician() { Id = 5, Name = "Shequondolisa Bivouac" },
+            new Musician() { Id = 6, Name = "Ingredia Nutrisha" },
+            new Musician() { Id = 7, Name = "Fig Nelson" },
+            new Musician() { Id = 8, Name = "Benjamin Evalent" },
+            new Musician() { Id = 9, Name = "Gustav Purpleson" },
+            new Musician() { Id = 10, Name = "Elon Gated" },
         };
 
 
@@ -58,7 +58,9 @@ namespace RockMusicBand
 
         List<BandMember> bandMembers = new List<BandMember>();
 
-        List<BandWithMembers> bandsWithMembers = new List<BandWithMembers>();
+        readonly string[] role = { "Vocals", "Bass", "Guitar", "Drumms" };
+
+
 
 
 
@@ -69,18 +71,19 @@ namespace RockMusicBand
             int numberOfNouns = nouns.Count;
             Console.WriteLine($"Total number of  adjectives: { numberOfAdjectives}");
             Console.WriteLine($"Total number of  nouns: {numberOfNouns}");
+            PrintSelectionLine();
         }
 
         public void GenerateRandomBandName()
         {
-            var randomForAjective = new Random();
-            var randomAdjectiveIndex = randomForAjective.Next(adjectives.Count);
+            Random randomForAjective = new Random();
+            var randomAdjectiveIndex = randomForAjective.Next(1, adjectives.Count);
             var randomAdjective = adjectives.FirstOrDefault(n => n.Id == randomAdjectiveIndex);
 
 
-            var randomForNoun = new Random();
-            var randomNounIndex = randomForNoun.Next(adjectives.Count);
-            var randomNoun = nouns.SingleOrDefault(n => n.Id == randomNounIndex);
+            Random randomForNoun = new Random();
+            var randomNounIndex = randomForNoun.Next(1, adjectives.Count);
+            var randomNoun = nouns.FirstOrDefault(n => n.Id == randomNounIndex);
 
             string bandName = $"{randomAdjective.Adjective} {randomNoun.Noun}";
 
@@ -99,9 +102,8 @@ namespace RockMusicBand
 
             bands.Add(new Band { Id = bandId, BandName = bandName });
 
-            Console.WriteLine($"Random band name: {bandName}");
-
-
+            Console.WriteLine($"You have created random band name: {bandName}");
+            PrintSelectionLine();
         }
 
 
@@ -118,7 +120,7 @@ namespace RockMusicBand
             var adjectiveChoiceNumber = Convert.ToInt32(adjectiveChoiceString);
             var adjectiveChoice = adjectives.FirstOrDefault(n => n.Id == adjectiveChoiceNumber);
 
-            Console.WriteLine("Type the number of noun you like, and press Enter");
+            Console.WriteLine("Now type the number of noun you like, and press Enter");
 
             foreach (BandNoun noun in nouns)
             {
@@ -145,8 +147,10 @@ namespace RockMusicBand
             bands.Add(new Band { Id = bandId, BandName = bandName });
 
             Console.WriteLine($"You have created the band named: {bandName}");
-
+            PrintSelectionLine();
         }
+
+
 
         public void AddAdjectiveForBandName()
         {
@@ -159,7 +163,9 @@ namespace RockMusicBand
 
 
             adjectives.Add(new BandAdjective { Id = newAdjectiveId, Adjective = adjectiveOwn });
+
             Console.WriteLine($"You added adjective {adjectiveOwn}");
+            PrintSelectionLine();
         }
 
         public void AddNounForBandName()
@@ -172,71 +178,76 @@ namespace RockMusicBand
             var newNounId = numberOfNouns + 1;
 
             nouns.Add(new BandNoun { Id = newNounId, Noun = nounOwn });
-            Console.WriteLine($"You added noun: {nounOwn}");
 
+            Console.WriteLine($"You added noun: {nounOwn}");
+            PrintSelectionLine();
         }
 
         public void GenerateMembersForBand()
         {
 
-            Console.WriteLine("Select band from list end enter its number:");
-            foreach (Band band in bands)
+            Console.WriteLine("Select the band from list end enter its number:");
+
+            if (bands.Count == 0)
             {
-                Console.WriteLine($"{band.Id} { band.BandName}");
+                Console.WriteLine("No bands in database exist");
+                PrintSelectionLine();
             }
-
-            var selectedBand = Console.ReadLine();
-            var selectedBandNumber = Convert.ToInt32(selectedBand);
-            var bandChoice = bands.SingleOrDefault(n => n.Id == selectedBandNumber);
-            string bandName = $"{bandChoice.BandName}";
-
-
-            int bandMembersNumber = 4;
-
-            string[] role = { "Vocals", "Bass", "Guitar", "Drumms" };
-
-            for (int i = 0; i < bandMembersNumber; i++)
+            else
             {
-                var randomForName = new Random();
-                var randomNameIndex = randomForName.Next(musicians.Count);
-                var randomName = musicians.SingleOrDefault(n => n.Id == randomNameIndex);
-                string memberName = randomName.Name;
-                bandMembers.Add(new BandMember { MemberName = memberName, Role = role[i] });
+                foreach (Band band in bands)
+                {
+                    Console.WriteLine($"{band.Id} { band.BandName}");
 
+                }
+
+                var selectedBand = Console.ReadLine();
+                var selectedBandNumber = Convert.ToInt32(selectedBand);
+                var bandChoice = bands.SingleOrDefault(n => n.Id == selectedBandNumber);
+                string bandName = $"{bandChoice.BandName}";
+
+
+
+                Console.WriteLine("Generated band members:");
+                for (int i = 0; i < role.Length; i++)
+                {
+                    var randomForName = new Random();
+                    var randomNameIndex = randomForName.Next(1, musicians.Count);
+                    var randomName = musicians.SingleOrDefault(n => n.Id == randomNameIndex);
+                    string memberName = randomName.Name;
+                    Console.WriteLine($"{role[i]}: {memberName}");
+                    bandMembers.Add(new BandMember { BandName = bandName, MemberName = memberName, Role = role[i] });
+                }
+
+                PrintSelectionLine();
             }
-
-            Console.WriteLine("Generated band members:");
-            foreach (BandMember bandMember in bandMembers)
-            {
-                Console.WriteLine($"{bandMember.MemberName} {bandMember.Role}");
-
-            }
-
-            bandsWithMembers.Add(new BandWithMembers { BandName = bandName, BandMembers = bandMembers });
-
-            
-
-
         }
 
         public void PrintBands()
         {
-            if (bands != null)
+
+            Console.WriteLine("Generated bands with members:");
+            if (bandMembers.Count == 0)
             {
-                foreach (BandWithMembers band in bandsWithMembers)
+                Console.WriteLine("No bands with members in database");
+            }
+            else
+            {
+                foreach (BandMember bandMember in bandMembers)
                 {
-                    Console.WriteLine($"{band.BandName} members: ");
-                    foreach (BandMember bandMember in bandMembers)
-                    {
-                        Console.WriteLine($"{bandMember.MemberName} {bandMember.Role}");
-                    }
+
+                    Console.WriteLine($"{bandMember.BandName}: {bandMember.MemberName} {bandMember.Role}");
+
                 }
             }
 
-            else
-            {
-                Console.WriteLine("No bands exist");
-            }
+            PrintSelectionLine();
+        }
+
+        public void PrintSelectionLine()
+        {
+            Console.WriteLine("---------------------------");
+            Console.WriteLine("Please select an option from the menu");
         }
     }
 }

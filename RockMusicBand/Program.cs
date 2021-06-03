@@ -13,7 +13,7 @@ namespace RockMusicBand
             Model model = new Model();
 
             PrintMenu();
-           
+
             static void PrintMenu()
             {
                 Console.WriteLine("Rock Music Band Application");
@@ -67,7 +67,6 @@ namespace RockMusicBand
 
                 }
             }
-
         }
     }
 }

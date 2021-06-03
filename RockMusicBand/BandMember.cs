@@ -6,8 +6,8 @@ namespace RockMusicBand
 {
     class BandMember
     {
+        public string BandName { get; set; }
         public string MemberName { get; set; }
-
         public string Role { get; set; }
 
     }
